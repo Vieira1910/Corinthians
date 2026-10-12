@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <!-- Codificação e responsividade (viewport-fit=cover usa a tela toda em celulares com notch) -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <!-- SEO básico -->
+  <title>Corinthians — Do túnel ao campo</title>
+  <meta name="description" content="Experiência digital conceitual do Corinthians: túnel, torcida, história, ídolos, títulos e Neo Química Arena.">
+
+  <!-- Fontes: Anton (títulos) e Archivo (textos). Sem internet o navegador usa fontes de reserva. -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;600;800&display=swap">
+
+  <!-- Estilos do site -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Ícone da aba -->
+  <link rel="icon" href="imagens do time/LOGO.png">
+</head>
+
+<body>
+
+  <!-- ABERTURA: escudo + contagem de 1900 até 1910 (o JavaScript anima e depois some com ela) -->
+  <div id="pre">
+    <div class="pw">
+      <img class="pcrest" src="imagens do time/escudo neutro.png" alt="Escudo do Corinthians">
+      <b id="pc">1900</b>
+    </div>
+  </div>
+
+  <!-- Barra de progresso de leitura (largura controlada pelo JavaScript) -->
+  <div id="prog"></div>
+
+  <!-- Cursor circular "Ver" que acompanha o mouse sobre os ídolos -->
+  <div id="cu">Ver</div>
+
+  <!-- CABEÇALHO: logo, menu e botão hambúrguer (mobile) -->
+  <header id="hd">
+    <a href="#top" class="logo" aria-label="Corinthians — início">
+      <img src="imagens do time/LOGO.png" alt="Corinthians">
+    </a>
+
+    <!-- Botão do menu mobile (as duas barras viram um X) -->
+    <button class="bg" id="bg" aria-label="Abrir menu" aria-expanded="false">
+      <i></i><i></i>
+    </button>
+
+    <!-- Navegação principal: cada link leva a uma seção pelo id -->
+    <nav aria-label="Principal">
+      <ul>
+        <li><a href="#tunel">Túnel</a></li>
+        <li><a href="#jogos">Momentos</a></li>
+        <li><a href="#elenco">Recordistas</a></li>
+        <li><a href="#historia">História</a></li>
+        <li><a href="#idolos">Ídolos</a></li>
+        <li><a href="#titulos">Títulos</a></li>
+        <li><a href="#fiel">Fiel</a></li>
+        <li><a href="#arena">Arena</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="top">
+
+    <!-- 1) HERO: banner principal. Mouse em cima (ou clique/toque) mostra o vídeo da torcida -->
+    <section class="hero">
+      <div class="bn" id="bn" role="button" tabindex="0" aria-pressed="false"
+        aria-label="Banner principal. Passe o mouse ou clique para ver o vídeo da torcida">
+        <img src="imagens do time/banner.png" alt="Banner do Corinthians com o escudo, a torcida e a Neo Química Arena"
+          fetchpriority="high">
+        <video id="bv" src="imagens do time/Video da torcida.mp4" poster="imagens do time/banner.png" muted loop
+          playsinline preload="none"></video>
+        <span class="bh">▶ Passe o mouse ou toque para ver a Fiel</span>
+      </div>
+
+      <!-- Texto sobre o banner (cada linha do título sobe em animação) -->
+      <div class="t">
+        <div class="ey">Sport Club Corinthians Paulista · 1910</div>
+        <h1>
+          <s><em>Um clube.</em></s>
+          <s><em>Milhões</em></s>
+          <s><em>de vozes.</em></s>
+        </h1>
+        <div class="hr">
+          <p>Passe o mouse no banner ou toque nele: a Fiel invade a tela. Depois, desça — o túnel espera.</p>
+          <a class="btn" href="#tunel">Entrar em campo ↓</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2) DO TÚNEL AO CAMPO: ao rolar, uma fresta de luz abre e o vídeo ocupa a TELA CHEIA.
+         A seção é alta (340vh) e o palco (.stk) fica "grudado" na tela enquanto o scroll avança. -->
+    <section class="tun" id="tunel" aria-label="Do túnel ao campo">
+      <div class="stk">
+
+        <!-- Vídeo em tela cheia (o recorte "abre" de uma fresta até a tela toda) -->
+        <div class="frame" id="fr">
+          <video id="tv" src="imagens do time/Video 2.mp4" muted loop playsinline preload="metadata"
+            aria-label="Vista aérea de uma partida na Neo Química Arena"></video>
+        </div>
+
+        <!-- Fresta de luz do túnel (some quando o vídeo abre) -->
+        <div class="slit" id="sl" aria-hidden="true"></div>
+
+        <!-- Palavras que entram pelas laterais -->
+        <h2 class="tw l" id="twl">Do túnel</h2>
+        <h2 class="tw r" id="twr">ao campo</h2>
+
+        <!-- Controles do vídeo: som e tela cheia real do navegador -->
+        <div class="fcap" id="fcp">
+          <span>Neo Química Arena</span>
+          <div class="fbtns">
+            <button class="snd" id="snd" type="button" aria-pressed="false">Ativar som</button>
+            <button class="snd" id="fsb" type="button">Tela cheia</button>
+          </div>
+        </div>
+
+        <!-- Dica enquanto o túnel está fechado -->
+        <p class="tcap" id="tcap">Role para abrir o túnel</p>
+      </div>
+    </section>
+
+    <!-- 3) IDENTIDADE: o JavaScript separa o texto em palavras que acendem com o scroll -->
+    <section>
+      <div class="ey rv">Identidade</div>
+      <p class="mf" id="mf">
+        Fundado por operários no Bom Retiro, o Corinthians é o time do povo. Raça antes de talento. Preto e branco, sem
+        enfeite. Quem entra no Parque nunca mais é o mesmo.
+      </p>
+    </section>
+
+    <!-- 4) MOMENTOS ETERNOS: abas com os dias que fizeram a história do clube.
+         As abas (#lgt) e o cartão (#lgc) são montados pelo JavaScript a partir de DATA.moments. -->
+    <section id="jogos" class="legend">
+      <div class="bgimg" aria-hidden="true"></div>
+      <div class="ey rv">Momentos eternos</div>
+      <h2 class="rv">Dias que<br>viraram lenda</h2>
+      <div class="lg rv">
+        <div class="lg-tabs" id="lgt" role="tablist" aria-label="Momentos eternos"></div>
+        <article class="lg-card" id="lgc" role="tabpanel" aria-live="polite"></article>
+      </div>
+      <p class="nt">Textos editáveis em <code>DATA.moments</code> no script.js. Confira os detalhes históricos antes de publicar.</p>
+    </section>
+
+    <!-- 5) RECORDISTAS: quem mais vestiu a camisa do Corinthians (lista preenchida pelo JavaScript, DATA.squad) -->
+    <section id="elenco">
+      <div class="ey rv">Recordistas</div>
+      <h2 class="rv">Quem mais vestiu<br>a camisa</h2>
+      <div class="rv" id="sq" style="margin-top:50px"></div>
+      <p class="nt">Número de jogos pelo Corinthians conforme informado. Para atualizar ou acrescentar jogadores, edite <code>DATA.squad</code> no script.js.</p>
+    </section>
+
+    <!-- 6) HISTÓRIA: linha do tempo horizontal. A seção é alta e o conteúdo anda para o lado ao rolar.
+         Os cartões (.ev) são inseridos pelo JavaScript dentro de #tr (DATA.ev). -->
+    <section id="historia" class="hi" aria-label="História">
+      <div class="pin">
+        <div class="tr" id="tr">
+          <div class="in0">
+            <div class="ey">História</div>
+            <h2>Mais de um século de Timão</h2>
+            <p style="color:var(--sv);margin-top:20px">Continue rolando. A linha do tempo anda com você.</p>
+          </div>
+        </div>
+        <!-- Barra de progresso da linha do tempo -->
+        <div class="tb"><i id="tbi"></i></div>
+      </div>
+    </section>
+
+    <!-- 7) ÍDOLOS: painéis que se expandem. Fotos, textos, jogos e gols vêm de DATA.ids (JavaScript) -->
+    <section id="idolos">
+      <div class="ey rv">Ídolos</div>
+      <h2 class="rv">Lendas<br>eternas</h2>
+      <div class="ids rv" id="id"></div>
+      <p class="nt">Jogos e gols pelo Corinthians. Faixas (ex.: 297–298) indicam divergência entre fontes e "~69" é aproximado. Confirme com dados oficiais e os direitos de uso das fotos antes de publicar.</p>
+    </section>
+
+    <!-- 8) TÍTULOS: letreiro que anda com o scroll + números que contam de 0 até data-n -->
+    <section id="titulos">
+      <div class="ey rv">Títulos</div>
+      <h2 class="rv">Cada taça<br>tem história</h2>
+
+      <!-- Letreiro (conteúdo criado pelo JavaScript) -->
+      <div class="mq" aria-hidden="true">
+        <div id="mqi"></div>
+      </div>
+
+      <!-- Grade de conquistas. Altere o número final no atributo data-n -->
+      <div class="tg rv">
+        <div class="tc w">
+          <span class="n"><b data-n="1">0</b><sup>2012</sup></span>
+          <h3>Libertadores da América</h3>
+          <p>Invicta, em 2012.</p>
+        </div>
+        <div class="tc">
+          <span class="n"><b data-n="2">0</b><sup>2000 · 2012</sup></span>
+          <h3>Mundial de Clubes</h3>
+          <p>Campeão do mundo duas vezes.</p>
+        </div>
+        <div class="tc">
+          <span class="n"><b data-n="7">0</b></span>
+          <h3>Brasileiros</h3>
+          <p>Conferir contagem atual antes de publicar.</p>
+        </div>
+        <div class="tc">
+          <span class="n"><b data-n="4">0</b></span>
+          <h3>Copa do Brasil</h3>
+          <p>1995 · 2002 · 2009 · 2025.</p>
+        </div>
+        <div class="tc">
+          <span class="n"><b data-n="30">0</b><sup>+</sup></span>
+          <h3>Paulistas</h3>
+          <p>Contagem editável em data-n.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 9) A FIEL: mosaico em canvas (palavras e imagens). O desenho é feito pelo JavaScript.
+         O botão "Trocar mosaico" e os quadradinhos (#mdots) mudam entre os mosaicos de DATA.mosaics. -->
+    <section id="fiel" class="fi">
+      <div class="ey rv" style="justify-content:center">A Fiel</div>
+      <h2 class="rv">Quando a massa<br>se junta</h2>
+      <canvas id="mc" aria-label="Mosaico da torcida: passe o cursor para desmanchar"></canvas>
+
+      <!-- Nome do mosaico atual e quadradinhos para escolher (criados pelo JavaScript) -->
+      <p class="fi-cap" id="mname" aria-live="polite">FIEL</p>
+      <div class="fi-dots" id="mdots"></div>
+
+      <p>Os cartões se erguem e formam o mosaico. Passe o dedo ou o mouse para desmanchar. Use o botão para trocar de mosaico.</p>
+      <div class="fi-ctl">
+        <button class="btn" id="mnext" type="button">Trocar mosaico →</button>
+        <button class="btn" id="rb" type="button">Reerguer mosaico</button>
+      </div>
+    </section>
+
+    <!-- 10) ARENA: comparador deslizante entre a vista externa e a interna -->
+    <section id="arena">
+      <div class="ar">
+        <div class="rv">
+          <div class="cmp">
+            <!-- Foto de baixo: parte de fora -->
+            <img src="imagens do time/estadio por fora.jpg" alt="Neo Química Arena, vista externa à noite" loading="lazy"
+              style="object-position:50% 40%">
+            <!-- Foto de cima: parte de dentro (recortada pelo controle deslizante) -->
+            <img class="b2" id="b2" src="imagens do time/estadio por dentro.jpg"
+              alt="Neo Química Arena por dentro, com mosaico da torcida" loading="lazy">
+            <!-- Linha e botão redondo que acompanham o controle -->
+            <div class="hd2" id="hl"></div>
+            <span class="lb" style="left:14px">Externa</span>
+            <span class="lb" style="right:14px">Interna</span>
+            <!-- Controle invisível que cobre a imagem e recebe o arrastar -->
+            <input type="range" id="rg" min="0" max="100" value="50" aria-label="Comparar externa e interna">
+          </div>
+        </div>
+
+        <div class="rv">
+          <div class="ey">Neo Química Arena</div>
+          <h2>A casa<br>da Fiel</h2>
+          <p style="color:var(--sv);margin-top:20px">Em Itaquera, zona leste de São Paulo. Abriu a Copa do Mundo de 2014 e é a casa do Timão.</p>
+          <div class="fc">
+            <div><b>≈49 mil</b><small>capacidade</small></div>
+            <div><b>2014</b><small>inauguração</small></div>
+            <div><b>Itaquera</b><small>São Paulo, SP</small></div>
+            <div><b>Copa 2014</b><small>jogo de abertura</small></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11) CHAMADA FINAL -->
+    <section class="cta">
+      <h2 class="rv">Aqui é<br>Corinthians</h2>
+      <a class="btn rv" href="#top">Voltar ao início ↑</a>
+    </section>
+  </main>
+
+  <!-- RODAPÉ -->
+  <footer>
+    <span>Projeto conceitual não oficial. Imagens fornecidas pelo autor.</span>
+    <span>Dados editáveis em DATA.</span>
+  </footer>
+
+  <!-- Código do site (defer = só roda depois que o HTML foi lido) -->
+  <script src="script.js" defer></script>
+</body>
+
+</html>

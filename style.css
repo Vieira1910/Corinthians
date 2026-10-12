@@ -1,0 +1,1789 @@
+/* ==========================================================
+   Corinthians — style.css
+   Organização: base → abertura → cabeçalho → hero → túnel →
+   identidade → momentos → elenco → história → ídolos →
+   títulos → Fiel → arena → rodapé → complementos.
+   Para trocar cores e fontes, edite as variáveis em :root.
+   ========================================================== */
+
+/* ==========================================================
+   BASE: variáveis, reset e estilos gerais
+   ========================================================== */
+
+/* Variáveis globais: cores, fontes, espaçamento lateral (--p) e curva de animação (--e). Mude aqui para trocar o visual do site todo. */
+:root {
+  --bg: #050505;
+  --fg: #f4f4f2;
+  --mut: #858585;
+  --ln: #222;
+  --sv: #c9ccd1;
+  --p: clamp(20px, 5vw, 72px);
+  --d: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --b: 'Archivo', 'Helvetica Neue', Arial, sans-serif;
+  --e: cubic-bezier(.2, .7, .2, 1);
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Mantém o tema escuro mesmo se o sistema estiver no modo claro. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #050505;
+  }
+}
+
+/* Mesmo tema escuro, quando forçado pelo atributo data-theme. */
+:root[data-theme="dark"] {
+  --bg: #050505;
+}
+
+/* Fundo da página e folga no topo ao rolar até uma âncora (por causa do menu fixo). */
+html {
+  background: var(--bg);
+  scroll-padding-top: 70px;
+}
+
+/* Reset: remove margens padrão e faz padding/borda contarem dentro da largura. */
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+/* Estilo base do texto e bloqueio da rolagem lateral. */
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font: 400 17px/1.6 var(--b);
+  overflow-x: hidden;
+}
+
+/* Links herdam a cor do texto e não têm sublinhado. */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Títulos e números grandes: fonte Anton, maiúsculas e linhas bem juntas. */
+h1,
+h2,
+h3,
+.n {
+  font-family: var(--d);
+  font-weight: 400;
+  text-transform: uppercase;
+  line-height: .9;
+}
+
+/* Títulos de seção (tamanho fluido: cresce com a tela). */
+h2 {
+  font-size: clamp(44px, 8vw, 128px);
+}
+
+/* Subtítulos (tamanho fluido). */
+h3 {
+  font-size: clamp(26px, 3vw, 44px);
+}
+
+/* Rótulo pequeno em caixa-alta que fica acima dos títulos. */
+.ey {
+  font: 800 11px var(--b);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--sv);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+/* Traço decorativo antes do rótulo. */
+.ey:before {
+  content: "";
+  width: 34px;
+  height: 1px;
+  background: var(--sv);
+}
+
+/* Espaçamento padrão de todas as seções. */
+section {
+  padding: clamp(90px, 13vw, 180px) var(--p);
+  position: relative;
+}
+
+/* Contorno visível ao navegar pelo teclado (acessibilidade). */
+:focus-visible {
+  outline: 2px solid var(--sv);
+  outline-offset: 4px;
+}
+
+/* Botão padrão: contorno branco e texto em caixa-alta. */
+.btn {
+  display: inline-flex;
+  gap: 12px;
+  padding: 16px 28px;
+  border: 1px solid var(--fg);
+  font: 800 11px var(--b);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+  background: none;
+  color: var(--fg);
+  cursor: pointer;
+  z-index: 0;
+  transition: color .4s var(--e);
+}
+
+/* Camada branca escondida embaixo do botão; sobe ao passar o mouse. */
+.btn:before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform: translateY(101%);
+  transition: transform .45s var(--e);
+  z-index: -1;
+}
+
+/* No hover o texto fica escuro para contrastar com o fundo branco. */
+.btn:hover {
+  color: var(--bg);
+}
+
+/* Sobe a camada branca e preenche o botão. */
+.btn:hover:before {
+  transform: none;
+}
+
+/* Elementos que aparecem ao rolar: começam invisíveis e um pouco abaixo. */
+.rv {
+  opacity: 0;
+  transform: translateY(46px);
+  transition: opacity 1s var(--e), transform 1s var(--e);
+}
+
+/* Estado final (classe .in colocada pelo JavaScript): visível e no lugar. */
+.rv.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ==========================================================
+   ABERTURA (escudo + 1910) E BARRA DE PROGRESSO
+   ========================================================== */
+
+/* Tela preta com escudo e contagem, por cima de tudo. */
+#pre {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  transition: transform 1s var(--e) .2s;
+}
+
+/* Quando a contagem termina, a tela sobe e revela o site. */
+#pre.go {
+  transform: translateY(-100%);
+}
+
+/* Número do ano na abertura. */
+#pre b {
+  font: 400 clamp(80px, 22vw, 300px) var(--d);
+  letter-spacing: .02em;
+}
+
+/* Barra fina de progresso de leitura no topo da página. */
+#prog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--fg);
+  width: 0;
+  z-index: 90;
+}
+
+/* ==========================================================
+   CABEÇALHO E MENU
+   ========================================================== */
+
+/* Cabeçalho fixo no topo (logo + menu). */
+header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 60;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: calc(18px + env(safe-area-inset-top, 0px)) var(--p) 18px;
+  transition: .4s;
+}
+
+/* Depois de rolar: fundo escuro e cabeçalho mais compacto. */
+header.sc {
+  background: rgba(5, 5, 5, .9);
+  border-bottom: 1px solid var(--ln);
+  padding-top: calc(10px + env(safe-area-inset-top, 0px));
+  padding-bottom: 10px;
+}
+
+/* Link do logotipo. */
+.logo {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font: 400 20px var(--d);
+  letter-spacing: .1em;
+}
+
+/* Lista do menu no desktop (itens lado a lado). */
+nav ul {
+  display: flex;
+  gap: 28px;
+  list-style: none;
+  padding: 0;
+}
+
+/* Cada link do menu. */
+nav a {
+  font: 800 10px var(--b);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mut);
+  padding: 8px 0;
+  position: relative;
+  transition: .3s;
+}
+
+/* Sublinhado animado, começa com largura zero. */
+nav a:after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 2px;
+  width: 100%;
+  background: var(--fg);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .4s var(--e);
+}
+
+/* Link com mouse em cima ou da seção atual fica branco. */
+nav a:hover,
+nav a.on {
+  color: var(--fg);
+}
+
+/* Mostra o sublinhado. */
+nav a.on:after,
+nav a:hover:after {
+  transform: none;
+}
+
+/* Botão hambúrguer (escondido no desktop). */
+.bg {
+  display: none;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: 0;
+  position: relative;
+  z-index: 70;
+  cursor: pointer;
+}
+
+/* Barras do hambúrguer. */
+.bg i {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: var(--fg);
+  transition: .4s var(--e);
+}
+
+/* Barra de cima. */
+.bg i:first-child {
+  top: 16px;
+}
+
+/* Barra de baixo. */
+.bg i:last-child {
+  top: 26px;
+}
+
+/* Menu aberto: as barras se cruzam e viram um X. */
+.mo .bg i:first-child {
+  top: 21px;
+  transform: rotate(45deg);
+}
+
+/* Segunda barra do X. */
+.mo .bg i:last-child {
+  top: 21px;
+  transform: rotate(-45deg);
+}
+
+/* Menu mobile: vira uma tela cheia com abertura circular. */
+@media (max-width: 960px) {
+  .bg {
+    display: block;
+  }
+  nav {
+    position: fixed;
+    inset: 0;
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    padding: var(--p);
+    clip-path: circle(0 at calc(100% - 40px) 40px);
+    transition: clip-path .8s var(--e);
+    z-index: 65;
+  }
+  .mo nav {
+    clip-path: circle(150% at calc(100% - 40px) 40px);
+  }
+  nav ul {
+    flex-direction: column;
+    gap: 4px;
+  }
+  nav a {
+    font: 400 clamp(44px, 13vw, 80px) var(--d);
+    color: var(--fg);
+    letter-spacing: 0;
+  }
+}
+
+/* ==========================================================
+   HERO: banner principal com vídeo da torcida
+   ========================================================== */
+
+/* Seção inicial: ocupa a tela toda e empurra o texto para baixo. */
+.hero {
+  height: 100svh;
+  min-height: 600px;
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+/* Degradê escuro sobre o banner para dar leitura ao texto. */
+.hero:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--bg) 0, transparent 45%, rgba(0, 0, 0, .35));
+  pointer-events: none;
+}
+
+/* Bloco de texto do hero. */
+.hero .t {
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--p) clamp(44px, 8vh, 90px);
+  width: 100%;
+}
+
+/* Título principal do hero. */
+h1 {
+  font: 400 clamp(58px, 12.5vw, 210px)/.88 var(--d);
+  text-transform: uppercase;
+}
+
+/* Cada linha do título: máscara que esconde o texto antes de subir. */
+h1 s {
+  display: block;
+  overflow: hidden;
+  text-decoration: none;
+}
+
+/* Texto da linha: começa abaixo da máscara. */
+h1 em {
+  display: block;
+  font-style: normal;
+  transform: translateY(110%);
+  transition: transform 1.2s var(--e);
+}
+
+/* Com a abertura concluída (.ld), o texto sobe até o lugar. */
+.ld h1 em {
+  transform: none;
+}
+
+/* Segunda linha: só contorno e pequeno atraso. */
+h1 s:nth-child(2) em {
+  transition-delay: .12s;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fg);
+}
+
+/* Terceira linha: atraso maior (efeito em cascata). */
+h1 s:nth-child(3) em {
+  transition-delay: .24s;
+}
+
+/* Linha com o parágrafo e o botão. */
+.hr {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+/* Largura máxima do parágrafo. */
+.hr p {
+  max-width: 400px;
+  color: var(--sv);
+}
+
+/* ==========================================================
+   TÚNEL → CAMPO (vídeo em tela cheia, controlado pelo scroll)
+   ========================================================== */
+
+/* Seção alta: a altura extra é o "espaço de scroll" da animação */
+.tun {
+  padding: 0;
+  height: 340vh;
+}
+
+/* Palco: fica grudado na tela (sticky) enquanto a seção rola */
+.stk {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Recorte do vídeo: começa como uma fresta fina (clip-path) e o JavaScript abre até a tela toda */
+.frame {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #000;
+  clip-path: inset(49.6% 0 49.6% 0);
+  will-change: clip-path, transform;
+  z-index: 2;
+}
+
+/* O vídeo cobre a tela inteira (object-fit: cover corta o excesso sem deformar) */
+.frame video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.95) contrast(1.05);
+}
+
+/* Degradê escuro em cima e embaixo para dar leitura aos textos */
+.frame:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .5), transparent 25%, transparent 65%, rgba(0, 0, 0, .75));
+}
+
+/* Fresta de luz do túnel (some quando o vídeo abre) */
+.slit {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px;
+  background: #fff;
+  box-shadow: 0 0 50px 12px rgba(255, 255, 255, .55);
+  z-index: 3;
+}
+
+/* Barra inferior com nome do estádio e botões (aparece depois que o túnel abre) */
+.fcap {
+  position: absolute;
+  left: var(--p);
+  right: var(--p);
+  bottom: calc(22px + env(safe-area-inset-bottom, 0px));
+  z-index: 5;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  font: 800 10px var(--b);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  text-shadow: 0 1px 12px #000;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Grupo dos botões (som e tela cheia) */
+.fbtns {
+  display: flex;
+  gap: 10px;
+}
+
+/* Botão pequeno sobre o vídeo */
+.snd {
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, .55);
+  border: 1px solid rgba(255, 255, 255, .5);
+  color: var(--fg);
+  font: inherit;
+  cursor: pointer;
+  transition: background .3s, color .3s;
+}
+
+/* Hover: fica branco com texto escuro */
+.snd:hover {
+  background: var(--fg);
+  color: #050505;
+}
+
+/* Palavras "Do túnel" e "ao campo": entram pelas laterais (posição horizontal vem da variável --tx do JavaScript) */
+.tw {
+  position: absolute;
+  top: 50%;
+  z-index: 4;
+  margin: 0;
+  font-size: clamp(48px, 8.4vw, 150px);
+  color: #fff;
+  text-shadow: 0 4px 40px rgba(0, 0, 0, .7);
+  opacity: 0;
+  pointer-events: none;
+  transform: translate3d(var(--tx, 0), var(--ty, -50%), 0);
+  will-change: transform, opacity;
+}
+
+/* Palavra da esquerda */
+.tw.l {
+  left: var(--p);
+}
+
+/* Palavra da direita */
+.tw.r {
+  right: var(--p);
+  text-align: right;
+}
+
+/* Dica "Role para abrir o túnel" (some quando o túnel abre) */
+.tcap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: calc(3svh + env(safe-area-inset-bottom, 0px));
+  z-index: 5;
+  text-align: center;
+  font: 800 11px var(--b);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--sv);
+  text-shadow: 0 1px 12px #000;
+}
+
+/* Celular: palavras ficam uma no topo e outra embaixo, o resto se simplifica */
+@media (max-width: 700px) {
+  .tw {
+    --ty: 0;
+    top: auto;
+    font-size: clamp(46px, 15vw, 84px);
+  }
+
+  .tw.l {
+    top: calc(10svh + env(safe-area-inset-top, 0px));
+  }
+
+  .tw.r {
+    bottom: calc(14svh + env(safe-area-inset-bottom, 0px));
+  }
+
+  .tcap,
+  .fcap span {
+    display: none;
+  }
+
+  .fcap {
+    justify-content: flex-end;
+  }
+}
+
+/* ==========================================================
+   IDENTIDADE: frase que acende palavra por palavra
+   ========================================================== */
+
+/* Frase grande que acende palavra por palavra. */
+.mf {
+  font: 400 clamp(34px, 6.2vw, 100px)/1 var(--d);
+  text-transform: uppercase;
+  max-width: 1500px;
+}
+
+/* Palavra apagada (opacidade baixa). */
+.mf span {
+  opacity: .14;
+  transition: opacity .3s;
+}
+
+/* Palavra acesa (classe .on colocada pelo JavaScript). */
+.mf span.on {
+  opacity: 1;
+}
+
+/* ==========================================================
+   MOMENTOS ETERNOS: abas + cartão com placar
+   ========================================================== */
+
+/* Fundo preto da seção. */
+.legend {
+  background: #000;
+  overflow: hidden;
+}
+
+/* Foto do estádio ao fundo, em preto e branco e bem escura. */
+.bgimg {
+  position: absolute;
+  inset: 0;
+  background: url("imagens do time/estadio por dentro.jpg") center / cover;
+  filter: grayscale(1) contrast(1.1);
+  opacity: .2;
+}
+
+/* Degradê que escurece o topo e a base da foto. */
+.bgimg:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, #000, rgba(0, 0, 0, .35) 40%, #000);
+}
+
+/* Conteúdo fica acima da foto de fundo. */
+.legend > :not(.bgimg) {
+  position: relative;
+  z-index: 1;
+}
+
+/* Duas colunas: abas à esquerda e cartão à direita. */
+.lg {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: clamp(24px, 4vw, 64px);
+  margin-top: clamp(40px, 6vw, 80px);
+}
+
+/* Coluna de abas. */
+.lg-tabs {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--ln);
+}
+
+/* Cada aba: ano grande e título pequeno. */
+.lg-tab {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: baseline;
+  gap: 18px;
+  padding: 18px 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--ln);
+  color: var(--mut);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: color .3s, padding .4s var(--e);
+}
+
+/* Ano em contorno (preenche quando a aba está ativa). */
+.lg-tab .y {
+  font: 400 clamp(30px, 3.4vw, 48px) var(--d);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--mut);
+  transition: .4s;
+}
+
+/* Título curto da aba. */
+.lg-tab .t {
+  font: 800 11px var(--b);
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+
+/* Aba com mouse ou selecionada: texto branco e leve deslocamento. */
+.lg-tab:hover,
+.lg-tab[aria-selected="true"] {
+  color: var(--fg);
+  padding-left: 14px;
+}
+
+/* Ano preenchido na aba ativa. */
+.lg-tab[aria-selected="true"] .y {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+}
+
+/* Cartão do momento selecionado.
+   container-type: os tamanhos do placar (unidade cqw) acompanham a largura do próprio cartão,
+   assim os nomes dos times nunca estouram nem quebram no meio da palavra. */
+.lg-card {
+  container-type: inline-size;
+  min-width: 0;
+  min-height: 480px;
+  padding: clamp(24px, 4vw, 56px);
+  background: rgba(8, 8, 8, .78);
+  border: 1px solid var(--ln);
+}
+
+/* Animação de entrada toda vez que troca de aba. */
+.lg-card.swap {
+  animation: lgin .7s var(--e);
+}
+
+/* Entrada do cartão: sobe e aparece. */
+@keyframes lgin {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Linha com competição e local. */
+.lg-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font: 800 10px var(--b);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--mut);
+}
+
+/* Etiqueta com contorno (competição). */
+.chip {
+  padding: 8px 14px;
+  border: 1px solid var(--fg);
+  color: var(--fg);
+}
+
+/* Placar: time da casa, gols e visitante. */
+.lg-score {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(12px, 3vw, 40px);
+  margin: clamp(28px, 5vw, 56px) 0 14px;
+}
+
+/* Nomes dos times: ficam sempre em uma linha só (nowrap) e o tamanho acompanha a largura do cartão.
+   A primeira linha de font-size é reserva para navegadores antigos que não entendem cqw. */
+.lg-score h3 {
+  font-size: clamp(16px, 2.4vw, 40px);
+  font-size: clamp(16px, 3.6cqw, 42px);
+  white-space: nowrap;
+}
+
+/* Nome do visitante alinhado à direita. */
+.lg-score .r {
+  text-align: right;
+}
+
+/* Momentos sem placar (ex.: Democracia Corinthiana): palavra grande em contorno no lugar dos gols */
+.lg-big {
+  margin: clamp(28px, 5vw, 56px) 0 14px;
+  font: 400 clamp(40px, 8vw, 150px)/.85 var(--d);
+  font-size: clamp(36px, 11cqw, 150px);
+  text-transform: uppercase;
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fg);
+  white-space: nowrap;
+}
+
+/* Gols lado a lado. */
+.nums {
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 2vw, 24px);
+}
+
+/* Número de gols em contorno. */
+.nums b {
+  font: 400 clamp(70px, 10vw, 170px)/.85 var(--d);
+  font-size: clamp(70px, 17cqw, 170px);
+  color: transparent;
+  -webkit-text-stroke: 2px var(--fg);
+}
+
+/* Número do vencedor preenchido. */
+.nums b.w {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+}
+
+/* Símbolo ×. */
+.nums i {
+  font: normal 400 clamp(24px, 3vw, 44px) var(--d);
+  color: var(--mut);
+}
+
+/* Observação em destaque (pênaltis, autor do gol, frase...). */
+.lg-note {
+  margin-bottom: 18px;
+  text-align: center;
+  font: 800 11px var(--b);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--sv);
+}
+
+/* Título do momento. */
+.lg-head {
+  margin-top: clamp(20px, 3vw, 36px);
+  font-size: clamp(34px, 5vw, 72px);
+}
+
+/* Texto explicativo. */
+.lg-text {
+  max-width: 640px;
+  margin-top: 14px;
+  color: var(--sv);
+}
+
+/* Tablet/celular: as abas viram uma faixa horizontal rolável. */
+@media (max-width: 900px) {
+  .lg {
+    grid-template-columns: 1fr;
+  }
+
+  .lg-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    border-top: 0;
+  }
+
+  .lg-tab {
+    flex: 0 0 auto;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    padding: 14px 20px 12px 0;
+    border-bottom: 2px solid var(--ln);
+  }
+
+  .lg-tab:hover,
+  .lg-tab[aria-selected="true"] {
+    padding-left: 0;
+  }
+
+  .lg-tab[aria-selected="true"] {
+    border-bottom-color: var(--fg);
+  }
+
+  .lg-tab .t {
+    display: none;
+  }
+}
+
+/* Cartão estreito (celular ou tela média): os dois nomes ficam lado a lado em cima
+   (ainda em uma linha cada) e o placar vai para baixo, centralizado. */
+@container (max-width: 560px) {
+  .lg-score {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .lg-score h3 {
+    font-size: clamp(18px, 7cqw, 34px);
+  }
+
+  .lg-score .nums {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-content: center;
+  }
+
+  .nums b {
+    font-size: clamp(80px, 28cqw, 150px);
+  }
+}
+
+/* ==========================================================
+   ELENCO
+   ========================================================== */
+
+/* Linha de recordista: número de jogos, nome/texto e etiqueta. */
+.pl {
+  display: grid;
+  grid-template-columns: clamp(170px, 24vw, 380px) 1fr auto;
+  align-items: center;
+  gap: 20px;
+  border-top: 1px solid var(--ln);
+  cursor: pointer;
+}
+
+/* Última linha fecha com borda. */
+.pl:last-child {
+  border-bottom: 1px solid var(--ln);
+}
+
+/* Número de jogos enorme, só com contorno. */
+.pl .n {
+  font-size: clamp(64px, 9.5vw, 150px);
+  color: transparent;
+  -webkit-text-stroke: 1px var(--mut);
+  transition: .5s var(--e);
+}
+
+/* Hover: o número preenche e desliza. */
+.pl:hover .n {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+  transform: translateX(14px);
+}
+
+/* Legenda "jogos" abaixo do número (volta ao texto normal, sem contorno) */
+.pl .n small {
+  display: block;
+  margin-top: 6px;
+  font: 800 10px var(--b);
+  letter-spacing: .3em;
+  color: var(--mut);
+  -webkit-text-stroke: 0;
+}
+
+/* Posição no ranking ("1º mais jogos") acima do nome */
+.pl .rk {
+  display: block;
+  margin-bottom: 8px;
+  font: 800 10px var(--b);
+  letter-spacing: .24em;
+  text-transform: uppercase;
+  color: var(--sv);
+}
+
+/* Texto sobre o jogador. */
+.pl p {
+  color: var(--mut);
+  font-size: 14px;
+}
+
+/* Posição em caixa-alta. */
+.pl .ps {
+  font: 800 11px var(--b);
+  letter-spacing: .2em;
+  color: var(--sv);
+  text-transform: uppercase;
+}
+
+/* Celular: esconde a posição para caber. */
+@media (max-width: 600px) {
+  .pl {
+    grid-template-columns: 112px 1fr;
+  }
+
+  .pl .n {
+    font-size: 54px;
+  }
+  .pl .ps {
+    display: none;
+  }
+}
+
+/* Nota pequena ao fim de uma seção. */
+.nt {
+  font-size: 13px;
+  color: var(--mut);
+  margin-top: 22px;
+  border-left: 2px solid var(--ln);
+  padding-left: 14px;
+}
+
+/* ==========================================================
+   HISTÓRIA: linha do tempo horizontal
+   ========================================================== */
+
+/* Seção alta: o espaço de scroll da linha do tempo. */
+.hi {
+  padding: 0;
+  height: 520vh;
+}
+
+/* Palco que fica grudado na tela (sticky) enquanto a seção rola. */
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+/* Trilho horizontal que o JavaScript desloca para o lado. */
+.tr {
+  display: flex;
+  gap: 7vw;
+  padding: 0 var(--p);
+  will-change: transform;
+  align-items: center;
+}
+
+/* Primeiro bloco (título da história). */
+.in0 {
+  flex: 0 0 min(80vw, 560px);
+}
+
+/* Cartão de um acontecimento. */
+.ev {
+  flex: 0 0 min(78vw, 520px);
+  border-left: 1px solid var(--ln);
+  padding-left: 30px;
+  transition: opacity .5s;
+}
+
+/* Cartões fora do centro ficam apagados. */
+.ev:not(.a) {
+  opacity: .4;
+}
+
+/* Ano gigante em contorno. */
+.yr {
+  font: 400 clamp(110px, 18vw, 270px)/.85 var(--d);
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+  transition: .6s var(--e);
+}
+
+/* Ano do cartão ativo fica preenchido. */
+.a .yr {
+  color: var(--fg);
+  -webkit-text-stroke: 0;
+}
+
+/* Título do acontecimento. */
+.ev h3 {
+  margin: 14px 0 8px;
+}
+
+/* Texto do acontecimento. */
+.ev p {
+  color: var(--sv);
+  max-width: 440px;
+}
+
+/* Linha de progresso da linha do tempo. */
+.tb {
+  position: absolute;
+  left: var(--p);
+  right: var(--p);
+  bottom: 7vh;
+  height: 1px;
+  background: var(--ln);
+}
+
+/* Parte preenchida da linha. */
+.tb i {
+  display: block;
+  height: 3px;
+  margin-top: -1px;
+  background: var(--fg);
+  width: 0;
+}
+
+/* ==========================================================
+   ÍDOLOS: painéis que se expandem
+   ========================================================== */
+
+/* Linha de painéis lado a lado. */
+.ids {
+  display: flex;
+  height: min(86vh, 760px);
+  margin-top: 50px;
+  gap: 4px;
+}
+
+/* Cada painel: a foto cobre tudo e o texto fica na base. */
+.id {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #111;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+  cursor: none;
+  transition: flex .9s var(--e);
+}
+
+/* Painel com mouse (ou aberto por toque) cresce. */
+.id:hover,
+.id.o {
+  flex: 3.4;
+}
+
+/* Degradê escuro sobre a foto para o texto ficar legível. */
+.id:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, #000 4%, transparent 62%);
+}
+
+/* Texto fica acima do degradê. */
+.id>div {
+  position: relative;
+  z-index: 2;
+}
+
+/* Nome na vertical enquanto o painel está fechado. */
+.id h3 {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  transition: .5s var(--e);
+}
+
+/* Nome na horizontal quando o painel abre. */
+.id:hover h3,
+.id.o h3 {
+  writing-mode: horizontal-tb;
+  transform: none;
+}
+
+/* Descrição escondida (altura zero). */
+.id .d {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  color: var(--sv);
+  font-size: 15px;
+  transition: .6s var(--e);
+}
+
+/* Revela a descrição. */
+.id:hover .d,
+.id.o .d {
+  max-height: 220px;
+  opacity: 1;
+  margin-top: 10px;
+}
+
+/* Linha de estatísticas (camisa, jogos e gols).
+   flex-wrap: em telas estreitas os números quebram de linha em vez de estourar o painel. */
+.st {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 26px;
+  margin-top: 12px;
+}
+
+/* Número da estatística. */
+.st b {
+  font: 400 32px var(--d);
+  display: block;
+  line-height: 1;
+}
+
+/* Rótulo da estatística. */
+.st small {
+  font-size: 10px;
+  color: var(--mut);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+/* Cursor circular "Ver" que acompanha o mouse sobre os painéis. */
+#cu {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+  border-radius: 50%;
+  background: var(--fg);
+  color: #000;
+  display: grid;
+  place-items: center;
+  font: 800 10px var(--b);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  pointer-events: none;
+  z-index: 95;
+  transform: scale(0);
+  transition: transform .3s var(--e);
+}
+
+/* Celular: painéis empilhados que abrem ao toque. */
+@media (max-width: 800px) {
+  .ids {
+    flex-direction: column;
+    height: auto;
+  }
+  .id {
+    flex: none;
+    height: 88px;
+    cursor: pointer;
+  }
+  .id.o {
+    height: 420px;
+  }
+  .id:hover {
+    flex: none;
+  }
+  .id h3 {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 30px;
+  }
+  .id:hover .d {
+    max-height: 0;
+    opacity: 0;
+  }
+  .id.o .d {
+    max-height: 220px;
+    opacity: 1;
+  }
+  #cu {
+    display: none;
+  }
+}
+
+/* ==========================================================
+   TÍTULOS: letreiro e grade de conquistas
+   ========================================================== */
+
+/* Letreiro: faixa com texto grande que anda com o scroll. */
+.mq {
+  overflow: hidden;
+  white-space: nowrap;
+  border-block: 1px solid var(--ln);
+  padding: 14px 0;
+  margin: 50px calc(var(--p)*-1) 0;
+  font: 400 clamp(40px, 7vw, 100px) var(--d);
+  text-transform: uppercase;
+}
+
+/* Conteúdo do letreiro (movido pelo JavaScript). */
+.mq div {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Estrelas decorativas em contorno. */
+.mq span {
+  color: transparent;
+  -webkit-text-stroke: 1px var(--fg);
+  margin: 0 .4em;
+}
+
+/* Grade de conquistas em duas colunas. */
+.tg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Cada conquista. */
+.tc {
+  padding: clamp(28px, 4vw, 56px) 0;
+  border-bottom: 1px solid var(--ln);
+}
+
+/* Coluna da esquerda: borda à direita. */
+.tc:nth-child(odd) {
+  border-right: 1px solid var(--ln);
+  padding-right: 30px;
+}
+
+/* Coluna da direita: afastada da linha. */
+.tc:nth-child(even) {
+  padding-left: clamp(20px, 4vw, 56px);
+}
+
+/* Número grande da conquista. */
+.tc .n {
+  font-size: clamp(120px, 19vw, 290px);
+  display: block;
+  line-height: .85;
+  transition: .4s;
+}
+
+/* Anos ao lado do número. */
+.tc sup {
+  font-size: .2em;
+  color: var(--sv);
+  margin-left: 6px;
+  vertical-align: top;
+}
+
+/* Texto pequeno. */
+.tc p {
+  color: var(--mut);
+  font-size: 14px;
+}
+
+/* Hover: número vira contorno. */
+.tc:hover .n {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--fg);
+}
+
+/* Conquista em destaque (Libertadores): faixa branca de largura total. */
+.tc.w {
+  grid-column: 1/-1;
+  background: var(--fg);
+  color: #050505;
+  padding: clamp(28px, 5vw, 70px);
+  border: 0;
+}
+
+/* Texto cinza escuro sobre o fundo branco. */
+.tc.w p {
+  color: #555;
+}
+
+/* Celular: conquistas em uma coluna só. */
+@media (max-width: 700px) {
+  .tg {
+    grid-template-columns: 1fr;
+  }
+  .tc:nth-child(n) {
+    padding-left: 0;
+    padding-right: 0;
+    border-right: 0;
+  }
+  .tc.w {
+    padding: 30px 20px;
+  }
+}
+
+/* ==========================================================
+   A FIEL: mosaico em canvas
+   ========================================================== */
+
+/* Seção da Fiel: fundo preto e texto centralizado. */
+.fi {
+  background: #000;
+  text-align: center;
+  overflow: hidden;
+}
+
+/* Canvas do mosaico (desenhado pelo JavaScript). */
+#mc {
+  display: block;
+  width: 100%;
+  height: min(70vh, 640px);
+  margin: 26px 0;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+
+/* Mosaicos de imagem ficam mais altos, para a figura aparecer maior e mais nítida. */
+#mc.tall {
+  height: min(88vh, 860px);
+}
+
+/* Celular: a altura acompanha a largura da tela, sem sobrar espaço vazio em volta da figura. */
+@media (max-width: 700px) {
+  #mc.tall {
+    height: min(88vh, 140vw);
+  }
+}
+
+/* Texto explicativo abaixo do mosaico. */
+.fi p {
+  color: var(--sv);
+  max-width: 520px;
+  margin: 0 auto 22px;
+}
+
+/* Nome do mosaico atual (ex.: "Tu és orgulho"). */
+.fi .fi-cap {
+  margin: 0 auto 14px;
+  font: 800 11px var(--b);
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  color: var(--fg);
+}
+
+/* Linha de quadradinhos para escolher o mosaico. */
+.fi-dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 26px;
+}
+
+/* Cada quadradinho (um por mosaico). */
+.dot {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--mut);
+  cursor: pointer;
+  transition: background .3s, border-color .3s, transform .3s var(--e);
+}
+
+/* Hover: cresce um pouco e fica branco. */
+.dot:hover {
+  border-color: var(--fg);
+  transform: scale(1.25);
+}
+
+/* Mosaico atual: quadradinho preenchido. */
+.dot[aria-current="true"] {
+  background: var(--fg);
+  border-color: var(--fg);
+}
+
+/* Celular/toque: quadradinhos maiores para acertar com o dedo. */
+@media (pointer: coarse) {
+  .dot {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Botões "Trocar mosaico" e "Reerguer mosaico" lado a lado. */
+.fi-ctl {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ==========================================================
+   NEO QUÍMICA ARENA: comparador externa/interna
+   ========================================================== */
+
+/* Duas colunas: comparador e informações. */
+.ar {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: clamp(30px, 5vw, 80px);
+  align-items: center;
+}
+
+/* Caixa do comparador de imagens (proporção 4:3). */
+.cmp {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #111;
+}
+
+/* Foto de dentro: recortada pelo controle deslizante. */
+.cmp .b2 {
+  clip-path: inset(0 0 0 50%);
+}
+
+/* Linha vertical que marca a divisão. */
+.hd2 {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: #fff;
+  pointer-events: none;
+}
+
+/* Botão redondo com setas no meio da linha. */
+.hd2:after {
+  content: "↔";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46px;
+  height: 46px;
+  margin: -23px;
+  border-radius: 50%;
+  background: #fff;
+  color: #000;
+  display: grid;
+  place-items: center;
+}
+
+/* Controle invisível que cobre a imagem e recebe o arrastar. */
+.cmp input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: ew-resize;
+}
+
+/* Rótulos "Externa" e "Interna". */
+.cmp .lb {
+  position: absolute;
+  bottom: 14px;
+  font: 800 10px var(--b);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  z-index: 3;
+}
+
+/* Grade de fatos sobre o estádio. */
+.fc {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 28px;
+}
+
+/* Número/destaque do fato. */
+.fc b {
+  font: 400 clamp(32px, 4vw, 54px) var(--d);
+  display: block;
+  line-height: 1;
+}
+
+/* Legenda do fato. */
+.fc small {
+  color: var(--mut);
+  font-size: 13px;
+}
+
+/* Celular: uma coluna só. */
+@media (max-width: 850px) {
+  .ar {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================
+   CHAMADA FINAL E RODAPÉ
+   ========================================================== */
+
+/* Chamada final centralizada. */
+.cta {
+  text-align: center;
+  border-top: 1px solid var(--ln);
+}
+
+/* Espaço entre o título e o botão. */
+.cta h2 {
+  margin-bottom: 34px;
+}
+
+/* Rodapé. */
+footer {
+  padding: 36px var(--p);
+  border-top: 1px solid var(--ln);
+  color: var(--mut);
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* ==========================================================
+   ACESSIBILIDADE: respeita quem pede menos animação
+   ========================================================== */
+
+/* Para quem desativa animações no sistema: transições quase instantâneas e conteúdo sempre visível. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: .01s !important;
+  }
+  .rv {
+    opacity: 1;
+    transform: none;
+  }
+  h1 em {
+    transform: none;
+  }
+}
+
+/* ==========================================================
+   COMPLEMENTOS: abertura, logo, banner com vídeo, fotos dos ídolos e arena
+   ========================================================== */
+
+/* Abertura: escudo acima do contador. */
+.pw {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(10px, 2.5vh, 24px);
+}
+
+/* Escudo da abertura: aparece com zoom suave. */
+.pcrest {
+  width: clamp(90px, 15vw, 160px);
+  height: auto;
+  opacity: 0;
+  transform: scale(.85);
+  animation: pcr 1.1s var(--e) .1s forwards;
+}
+
+/* Animação do escudo: de pequeno e transparente para normal. */
+@keyframes pcr {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Tamanho final do contador do ano. */
+#pre b {
+  font-size: clamp(56px, 13vw, 170px);
+}
+
+/* Tamanho do logo no cabeçalho. */
+.logo img {
+  height: clamp(44px, 5vw, 58px);
+  width: auto;
+  display: block;
+}
+
+/* Fundo preto atrás do banner. */
+.hero {
+  background: #000;
+}
+
+/* Banner clicável: ocupa o hero inteiro. */
+.bn {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+  overflow: hidden;
+  background: #000;
+}
+
+/* Imagem e vídeo sobrepostos, cobrindo o banner todo. */
+.bn>img,
+.bn>video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 40%;
+}
+
+/* Imagem com leve zoom inicial (dá movimento à abertura). */
+.bn>img {
+  transform: scale(1.04);
+  transition: transform 2.4s var(--e);
+}
+
+/* Depois da abertura a imagem volta ao tamanho normal. */
+.ld .bn>img {
+  transform: none;
+}
+
+/* O vídeo começa invisível. */
+.bn>video {
+  opacity: 0;
+  transition: opacity .8s var(--e);
+}
+
+/* Com a classe .pl (mouse ou clique) o vídeo aparece. */
+.bn.pl>video {
+  opacity: 1;
+}
+
+/* Etiqueta "Passe o mouse..." no canto do banner. */
+.bh {
+  position: absolute;
+  z-index: 3;
+  right: var(--p);
+  top: calc(100px + env(safe-area-inset-top, 0px));
+  font: 800 10px var(--b);
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, .55);
+  border: 1px solid rgba(255, 255, 255, .3);
+  padding: 10px 14px;
+  pointer-events: none;
+  transition: opacity .4s;
+}
+
+/* Etiqueta some quando o vídeo está tocando. */
+.bn.pl .bh {
+  opacity: 0;
+}
+
+/* Contorno ao focar o banner pelo teclado. */
+.bn:focus-visible {
+  outline: 2px solid var(--sv);
+  outline-offset: -6px;
+}
+
+/* Degradê fica acima do banner. */
+.hero:after {
+  z-index: 2;
+}
+
+/* Texto acima do banner, sem bloquear o mouse sobre o banner. */
+.hero .t {
+  z-index: 3;
+  pointer-events: none;
+}
+
+/* Mas o botão continua clicável. */
+.hero .t .btn,
+.hero .t a {
+  pointer-events: auto;
+}
+
+/* Título do hero um pouco menor para não cobrir o escudo do banner. */
+.hero h1 {
+  font-size: clamp(40px, 8vw, 128px);
+}
+
+/* Folga inferior do bloco de texto. */
+.hero .t {
+  padding-bottom: clamp(30px, 6vh, 64px);
+}
+
+/* Foto do ídolo cobrindo o painel, em preto e branco. */
+.id img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) contrast(1.05);
+  transition: transform 1.2s var(--e), filter .7s;
+}
+
+/* Hover/aberto: zoom leve e a cor volta quase toda. */
+.id:hover img,
+.id.o img {
+  transform: scale(1.06);
+  filter: grayscale(.1) contrast(1.1);
+}
+
+/* Fotos do comparador cobrem a caixa. */
+.cmp img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Se a foto não carregar, mostra o número da camisa como fundo. */
+.id.sem-foto:before {
+  content: attr(data-num);
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font: 400 clamp(120px, 20vw, 260px) var(--d);
+  color: rgba(255, 255, 255, .08);
+}
